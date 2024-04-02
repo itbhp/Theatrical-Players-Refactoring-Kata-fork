@@ -7,7 +7,9 @@ group 'kata'
 version '1.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_20
+    toolchain {
+        it.languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
