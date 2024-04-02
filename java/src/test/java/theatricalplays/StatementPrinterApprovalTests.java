@@ -1,6 +1,5 @@
 package theatricalplays;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.Map;
 import static org.approvaltests.Approvals.verify;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StatementPrinterTests {
+public class StatementPrinterApprovalTests {
 
     @Test
     void exampleStatement() {
