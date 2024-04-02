@@ -9,7 +9,7 @@ public class StatementPrinter {
     public String print(Invoice invoice, Map<String, Play> plays) {
         var totalAmount = 0;
         var volumeCredits = 0;
-        var result = String.format("Statement for %s\n", invoice.customer);
+        var result = new StringBuilder(String.format("Statement for %s\n", invoice.customer));
 
         var numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
@@ -41,12 +41,12 @@ public class StatementPrinter {
             if ("comedy".equals(play.type)) volumeCredits += Math.floor(perf.audience / 5);
 
             // print line for this order
-            result += String.format("  %s: %s (%s seats)\n", play.name, numberFormat.format(thisAmount / 100), perf.audience);
+            result.append(String.format("  %s: %s (%s seats)\n", play.name, numberFormat.format(thisAmount / 100), perf.audience));
             totalAmount += thisAmount;
         }
-        result += String.format("Amount owed is %s\n", numberFormat.format(totalAmount / 100));
-        result += String.format("You earned %s credits\n", volumeCredits);
-        return result;
+        result.append(String.format("Amount owed is %s\n", numberFormat.format(totalAmount / 100)));
+        result.append(String.format("You earned %s credits\n", volumeCredits));
+        return result.toString();
     }
 
 }
