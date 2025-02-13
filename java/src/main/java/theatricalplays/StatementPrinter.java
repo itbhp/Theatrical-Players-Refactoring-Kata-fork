@@ -15,7 +15,7 @@ public class StatementPrinter {
   }
 
   public String print(Invoice invoice) {
-    var playsInfo =
+    var performancesOutput =
         invoice.performances().stream()
             .map(
                 performance -> {
@@ -33,7 +33,7 @@ public class StatementPrinter {
                 })
             .reduce(new PerformancesOutput("", 0, 0), PerformancesOutput::combine);
 
-    return statementFrom(invoice.customer(), playsInfo);
+    return statementFrom(invoice.customer(), performancesOutput);
   }
 
   private String statementFrom(String customer, PerformancesOutput performancesOutput) {
