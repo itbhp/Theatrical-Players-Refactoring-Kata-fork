@@ -4,6 +4,7 @@ public sealed interface Play permits Tragedy, Comedy, GenericPlay {
 
   String name();
   String type();
+  int amountFor(Audience audience);
 
   static Play of(String name, String type) {
     return switch (type) {
