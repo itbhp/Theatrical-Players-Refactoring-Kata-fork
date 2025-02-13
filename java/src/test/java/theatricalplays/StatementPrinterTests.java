@@ -12,33 +12,48 @@ class StatementPrinterTests {
 
     @Test
     void exampleStatement() {
-        var plays = Map.of(
-                "hamlet",  new Play("Hamlet", "tragedy"),
-                "as-like", new Play("As You Like It", "comedy"),
-                "othello", new Play("Othello", "tragedy"));
 
-        var invoice = new Invoice("BigCo", List.of(
-                new Performance("hamlet", 55),
-                new Performance("as-like", 35),
-                new Performance("othello", 40)));
+        var hamletId = new PlayId("hamlet");
+        var asLikeId = new PlayId("as-like");
+        var othelloId = new PlayId("othello");
+
+        var playsIdToPlay = Map.of(
+                hamletId, new Play("Hamlet", "tragedy"),
+                asLikeId, new Play("As You Like It", "comedy"),
+                othelloId, new Play("Othello", "tragedy"));
+
+        var invoice = new Invoice(
+                "BigCo",
+                List.of(
+                        new Performance(55, hamletId),
+                        new Performance(35, asLikeId),
+                        new Performance(40, othelloId)
+                )
+        );
 
         var statementPrinter = new StatementPrinter();
-        var result = statementPrinter.print(invoice, plays);
+        var result = statementPrinter.print(invoice, playsIdToPlay);
 
         verify(result);
     }
 
     @Test
     void statementWithNewPlayTypes() {
-        var plays = Map.of(
-                "henry-v",  new Play("Henry V", "history"),
-                "as-like", new Play("As You Like It", "pastoral"));
 
-        var invoice = new Invoice("BigCo", List.of(
-                new Performance("henry-v", 53),
-                new Performance("as-like", 55)));
+        var henryVId = new PlayId("henry-v");
+        var asLikeId = new PlayId("as-like");
+        var invoice = new Invoice(
+                "BigCo",
+                List.of(
+                        new Performance(53, henryVId),
+                        new Performance(55, asLikeId)
+                )
+        );
+        var playsIdToPLay = Map.of(
+                henryVId, new Play("Henry V", "history"),
+                asLikeId, new Play("As You Like It", "pastoral"));
 
         var statementPrinter = new StatementPrinter();
-        assertThrows(Error.class, () -> statementPrinter.print(invoice, plays));
+        assertThrows(Error.class, () -> statementPrinter.print(invoice, playsIdToPLay));
     }
 }
