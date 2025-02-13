@@ -20,8 +20,9 @@ public class StatementPrinter {
             .map(
                 performance -> {
                   var play = retrievePlayBy(performance.playId());
-                  var playAmount = play.amountFor(new Audience(performance.audience()));
-                  var volumeCredit = volumeCredit(performance, play);
+                  var audience = new Audience(performance.audience());
+                  var playAmount = play.amountFor(audience);
+                  var volumeCredit = play.volumeCreditsFor(audience);
                   var message =
                       String.format(
                           "  %s: %s (%s seats)",
@@ -42,14 +43,6 @@ public class StatementPrinter {
         + String.format(
             "Amount owed is %s\n", numberFormat.format(performancesOutput.playsAmount / 100))
         + String.format("You earned %s credits\n", performancesOutput.volumeCredits);
-  }
-
-  private int volumeCredit(Performance performance, Play play) {
-    var volumeCredit = Math.max(performance.audience() - 30, 0);
-    if ("comedy".equals(play.type())) {
-      return volumeCredit + Double.valueOf((double) performance.audience() / 5).intValue();
-    }
-    return volumeCredit;
   }
 
   private Play retrievePlayBy(PlayId playId) {

@@ -1,6 +1,6 @@
 package theatricalplays;
 
-public record Comedy(String name, String type) implements Play {
+public record Comedy(String name) implements Play {
   @Override
   public int amountFor(Audience audience) {
     var amount = 30000;
@@ -9,5 +9,11 @@ public record Comedy(String name, String type) implements Play {
     }
     amount += 300 * audience.soldTickets();
     return amount;
+  }
+
+  @Override
+  public int volumeCreditsFor(Audience audience) {
+    var base = Math.max(audience.soldTickets() - 30, 0);
+    return base + Double.valueOf((double) audience.soldTickets() / 5).intValue();
   }
 }
