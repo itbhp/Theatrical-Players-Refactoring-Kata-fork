@@ -24,11 +24,11 @@ public class StatementPrinter {
                   var playAmount = play.amountFor(audience);
                   var volumeCredit = play.volumeCreditsFor(audience);
                   var message =
-                      String.format(
-                          "  %s: %s (%s seats)",
-                          play.name(),
-                          numberFormat.format(playAmount / 100),
-                          performance.audience());
+                      "  %s: %s (%s seats)"
+                          .formatted(
+                              play.name(),
+                              numberFormat.format(playAmount / 100),
+                              performance.audience());
                   return new PerformancesOutput(message, playAmount, volumeCredit);
                 })
             .reduce(new PerformancesOutput("", 0, 0), PerformancesOutput::combine);
@@ -37,12 +37,10 @@ public class StatementPrinter {
   }
 
   private String statementFrom(String customer, PerformancesOutput performancesOutput) {
-    return String.format("Statement for %s", customer)
-        + performancesOutput.message
-        + "\n"
-        + String.format(
-            "Amount owed is %s\n", numberFormat.format(performancesOutput.playsAmount / 100))
-        + String.format("You earned %s credits\n", performancesOutput.volumeCredits);
+    return "Statement for %s".formatted(customer)
+        + "%s\n".formatted(performancesOutput.message)
+        + "Amount owed is %s\n".formatted(numberFormat.format(performancesOutput.playsAmount / 100))
+        + "You earned %s credits\n".formatted(performancesOutput.volumeCredits);
   }
 
   private Play retrievePlayBy(PlayId playId) {
