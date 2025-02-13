@@ -11,7 +11,7 @@ public class StatementPrinter {
 
   public StatementPrinter(Map<PlayId, Play> playsIdToPlay) {
     this.playsIdToPlay = playsIdToPlay;
-    numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
+    this.numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
   }
 
   public String print(Invoice invoice) {
@@ -28,18 +28,20 @@ public class StatementPrinter {
                           play.name(),
                           numberFormat.format(playAmount / 100),
                           performance.audience());
-                  return new Triple(message, playAmount, volumeCredit);
+                  return new PerformancesOutput(message, playAmount, volumeCredit);
                 })
-            .reduce(new Triple("", 0, 0), Triple::combine);
+            .reduce(new PerformancesOutput("", 0, 0), PerformancesOutput::combine);
 
-      return statementFrom(invoice.customer(), playsInfo);
+    return statementFrom(invoice.customer(), playsInfo);
   }
 
-  private String statementFrom(String customer, Triple playsInfo) {
+  private String statementFrom(String customer, PerformancesOutput performancesOutput) {
     return String.format("Statement for %s", customer)
-            + playsInfo.message + "\n"
-            + String.format("Amount owed is %s\n", numberFormat.format(playsInfo.playAmount / 100))
-            + String.format("You earned %s credits\n", playsInfo.volumeCredit);
+        + performancesOutput.message
+        + "\n"
+        + String.format(
+            "Amount owed is %s\n", numberFormat.format(performancesOutput.playsAmount / 100))
+        + String.format("You earned %s credits\n", performancesOutput.volumeCredits);
   }
 
   private int volumeCredit(Performance performance, Play play) {
@@ -77,12 +79,12 @@ public class StatementPrinter {
     return this.playsIdToPlay.get(playId);
   }
 
-  private record Triple(String message, Integer playAmount, Integer volumeCredit) {
-    public Triple combine(Triple triple) {
-      return new Triple(
-          this.message + "\n" + triple.message,
-          this.playAmount + triple.playAmount,
-          this.volumeCredit + triple.volumeCredit);
+  private record PerformancesOutput(String message, Integer playsAmount, Integer volumeCredits) {
+    public PerformancesOutput combine(PerformancesOutput performancesOutput) {
+      return new PerformancesOutput(
+          this.message + "\n" + performancesOutput.message,
+          this.playsAmount + performancesOutput.playsAmount,
+          this.volumeCredits + performancesOutput.volumeCredits);
     }
   }
 }
