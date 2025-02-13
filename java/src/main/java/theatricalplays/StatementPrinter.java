@@ -32,12 +32,14 @@ public class StatementPrinter {
                 })
             .reduce(new Triple("", 0, 0), Triple::combine);
 
-    var totalAmounts = playsInfo.playAmount;
-    var volumeCredits = playsInfo.volumeCredit;
-    return String.format("Statement for %s", invoice.customer())
-        + playsInfo.message + "\n"
-        + String.format("Amount owed is %s\n", numberFormat.format(totalAmounts / 100))
-        + String.format("You earned %s credits\n", volumeCredits);
+      return statementFrom(invoice.customer(), playsInfo);
+  }
+
+  private String statementFrom(String customer, Triple playsInfo) {
+    return String.format("Statement for %s", customer)
+            + playsInfo.message + "\n"
+            + String.format("Amount owed is %s\n", numberFormat.format(playsInfo.playAmount / 100))
+            + String.format("You earned %s credits\n", playsInfo.volumeCredit);
   }
 
   private int volumeCredit(Performance performance, Play play) {
