@@ -1,12 +1,5 @@
 package theatricalplays;
 
-public class Play {
+public record Play(String name, String type) {
 
-    public String name;
-    public String type;
-
-    public Play(String name, String type) {
-        this.name = name;
-        this.type = type;
-    }
 }

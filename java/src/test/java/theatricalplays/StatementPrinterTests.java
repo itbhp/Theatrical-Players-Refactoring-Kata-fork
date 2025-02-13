@@ -25,9 +25,9 @@ class StatementPrinterTests {
         var invoice = new Invoice(
                 "BigCo",
                 List.of(
-                        new Performance(55, hamletId),
-                        new Performance(35, asLikeId),
-                        new Performance(40, othelloId)
+                        new Performance(hamletId, 55),
+                        new Performance(asLikeId, 35),
+                        new Performance(othelloId, 40)
                 )
         );
 
@@ -45,8 +45,8 @@ class StatementPrinterTests {
         var invoice = new Invoice(
                 "BigCo",
                 List.of(
-                        new Performance(53, henryVId),
-                        new Performance(55, asLikeId)
+                        new Performance(henryVId, 53),
+                        new Performance(asLikeId, 55)
                 )
         );
         var playsIdToPlay = Map.of(

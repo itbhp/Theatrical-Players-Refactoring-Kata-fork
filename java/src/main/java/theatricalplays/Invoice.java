@@ -2,13 +2,6 @@ package theatricalplays;
 
 import java.util.List;
 
-public class Invoice {
+public record Invoice(String customer, List<Performance> performances) {
 
-    public String customer;
-    public List<Performance> performances;
-
-    public Invoice(String customer, List<Performance> performances) {
-        this.customer = customer;
-        this.performances = performances;
-    }
 }

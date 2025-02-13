@@ -7,7 +7,7 @@ import java.util.Map;
 public class StatementPrinter {
 
     private final NumberFormat numberFormat;
-    private Map<PlayId, Play> playsIdToPlay;
+    private final Map<PlayId, Play> playsIdToPlay;
 
     public StatementPrinter(Map<PlayId, Play> playsIdToPlay) {
         this.playsIdToPlay = playsIdToPlay;
@@ -17,37 +17,37 @@ public class StatementPrinter {
     public String print(Invoice invoice) {
         var totalAmount = 0;
         var volumeCredits = 0;
-        var result = String.format("Statement for %s\n", invoice.customer);
+        var result = String.format("Statement for %s\n", invoice.customer());
 
-        for (var performance : invoice.performances) {
-            var play = this.playsIdToPlay.get(performance.playId);
+        for (var performance : invoice.performances()) {
+            var play = this.playsIdToPlay.get(performance.playId());
             var thisAmount = 0;
 
-            switch (play.type) {
+            switch (play.type()) {
                 case "tragedy":
                     thisAmount = 40000;
-                    if (performance.audience > 30) {
-                        thisAmount += 1000 * (performance.audience - 30);
+                    if (performance.audience() > 30) {
+                        thisAmount += 1000 * (performance.audience() - 30);
                     }
                     break;
                 case "comedy":
                     thisAmount = 30000;
-                    if (performance.audience > 20) {
-                        thisAmount += 10000 + 500 * (performance.audience - 20);
+                    if (performance.audience() > 20) {
+                        thisAmount += 10000 + 500 * (performance.audience() - 20);
                     }
-                    thisAmount += 300 * performance.audience;
+                    thisAmount += 300 * performance.audience();
                     break;
                 default:
                     throw new Error("unknown type: ${play.type}");
             }
 
             // add volume credits
-            volumeCredits += Math.max(performance.audience - 30, 0);
+            volumeCredits += Math.max(performance.audience() - 30, 0);
             // add extra credit for every ten comedy attendees
-            if ("comedy".equals(play.type)) volumeCredits += Math.floor(performance.audience / 5);
+            if ("comedy".equals(play.type())) volumeCredits += Math.floor(performance.audience() / 5);
 
             // print line for this order
-            result += String.format("  %s: %s (%s seats)\n", play.name, numberFormat.format(thisAmount / 100), performance.audience);
+            result += String.format("  %s: %s (%s seats)\n", play.name(), numberFormat.format(thisAmount / 100), performance.audience());
             totalAmount += thisAmount;
         }
         result += String.format("Amount owed is %s\n", numberFormat.format(totalAmount / 100));

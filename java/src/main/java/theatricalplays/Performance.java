@@ -1,12 +1,5 @@
 package theatricalplays;
 
-public class Performance {
+public record Performance(PlayId playId, int audience) {
 
-    public final int audience;
-    public final PlayId playId;
-
-    public Performance(int audience, PlayId playId) {
-        this.audience = audience;
-        this.playId = playId;
-    }
 }
