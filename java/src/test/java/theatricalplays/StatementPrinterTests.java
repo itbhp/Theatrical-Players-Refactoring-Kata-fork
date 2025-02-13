@@ -31,8 +31,8 @@ class StatementPrinterTests {
                 )
         );
 
-        var statementPrinter = new StatementPrinter();
-        var result = statementPrinter.print(invoice, playsIdToPlay);
+        var statementPrinter = new StatementPrinter(playsIdToPlay);
+        var result = statementPrinter.print(invoice);
 
         verify(result);
     }
@@ -49,11 +49,11 @@ class StatementPrinterTests {
                         new Performance(55, asLikeId)
                 )
         );
-        var playsIdToPLay = Map.of(
+        var playsIdToPlay = Map.of(
                 henryVId, new Play("Henry V", "history"),
                 asLikeId, new Play("As You Like It", "pastoral"));
 
-        var statementPrinter = new StatementPrinter();
-        assertThrows(Error.class, () -> statementPrinter.print(invoice, playsIdToPLay));
+        var statementPrinter = new StatementPrinter(playsIdToPlay);
+        assertThrows(Error.class, () -> statementPrinter.print(invoice));
     }
 }
