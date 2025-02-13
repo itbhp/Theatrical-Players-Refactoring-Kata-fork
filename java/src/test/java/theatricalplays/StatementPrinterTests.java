@@ -19,9 +19,9 @@ class StatementPrinterTests {
 
     var playsIdToPlay =
         Map.of(
-            hamletId, new Play("Hamlet", "tragedy"),
-            asLikeId, new Play("As You Like It", "comedy"),
-            othelloId, new Play("Othello", "tragedy"));
+            hamletId, Play.of("Hamlet", "tragedy"),
+            asLikeId, Play.of("As You Like It", "comedy"),
+            othelloId, Play.of("Othello", "tragedy"));
 
     var invoice =
         new Invoice(
@@ -46,8 +46,8 @@ class StatementPrinterTests {
         new Invoice("BigCo", List.of(new Performance(henryVId, 53), new Performance(asLikeId, 55)));
     var playsIdToPlay =
         Map.of(
-            henryVId, new Play("Henry V", "history"),
-            asLikeId, new Play("As You Like It", "pastoral"));
+            henryVId, Play.of("Henry V", "history"),
+            asLikeId, Play.of("As You Like It", "pastoral"));
 
     var statementPrinter = new StatementPrinter(playsIdToPlay);
     assertThrows(Error.class, () -> statementPrinter.print(invoice));
