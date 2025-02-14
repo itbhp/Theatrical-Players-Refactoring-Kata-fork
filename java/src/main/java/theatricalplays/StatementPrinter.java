@@ -17,7 +17,7 @@ public class StatementPrinter {
 
   public String print(Invoice invoice) {
     var receipt =
-        new Receipt(
+        Receipt.of(
             invoice.performances().stream()
                 .map(
                     performance -> {
