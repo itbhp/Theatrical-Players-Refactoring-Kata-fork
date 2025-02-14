@@ -1,3 +1,3 @@
 package theatricalplays;
 
-public record Audience(int soldTickets) {}
+public record Audience(int seats) {}

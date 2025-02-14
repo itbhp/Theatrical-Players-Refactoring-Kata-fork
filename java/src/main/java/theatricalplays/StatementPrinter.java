@@ -3,6 +3,7 @@ package theatricalplays;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StatementPrinter {
 
@@ -15,44 +16,43 @@ public class StatementPrinter {
   }
 
   public String print(Invoice invoice) {
-    var performancesOutput =
-        invoice.performances().stream()
-            .map(
-                performance -> {
-                  var play = retrievePlayBy(performance.playId());
-                  var audience = new Audience(performance.audience());
-                  var playAmount = play.amountFor(audience);
-                  var volumeCredit = play.volumeCreditsFor(audience);
-                  var message =
-                      "  %s: %s (%s seats)"
-                          .formatted(
-                              play.name(),
-                              numberFormat.format(playAmount / 100),
-                              performance.audience());
-                  return new PerformancesOutput(message, playAmount, volumeCredit);
-                })
-            .reduce(new PerformancesOutput("", 0, 0), PerformancesOutput::combine);
+    var receipt =
+        new Receipt(
+            invoice.performances().stream()
+                .map(
+                    performance -> {
+                      var play = retrievePlayBy(performance.playId());
+                      var audience = new Audience(performance.audience());
+                      var playAmount = play.amountFor(audience);
+                      var volumeCredit = play.volumeCreditsFor(audience);
+                      return new Receipt.PerformanceReceipt(
+                          play.name(), performance.audience(), playAmount, volumeCredit);
+                    })
+                .toList());
 
-    return statementFrom(invoice.customer(), performancesOutput);
+    return statementFrom(invoice.customer(), receipt);
   }
 
-  private String statementFrom(String customer, PerformancesOutput performancesOutput) {
-    return "Statement for %s".formatted(customer)
-        + "%s\n".formatted(performancesOutput.message)
-        + "Amount owed is %s\n".formatted(numberFormat.format(performancesOutput.playsAmount / 100))
-        + "You earned %s credits\n".formatted(performancesOutput.volumeCredits);
+  private String statementFrom(String customer, Receipt receipt) {
+    return "Statement for %s\n".formatted(customer)
+        + "%s\n"
+            .formatted(
+                receipt.performanceReceipts().stream()
+                    .map(this::performaceMessage)
+                    .collect(Collectors.joining("\n")))
+        + "Amount owed is %s\n".formatted(numberFormat.format(receipt.totalAmounts() / 100))
+        + "You earned %s credits\n".formatted(receipt.totalCredits());
+  }
+
+  private String performaceMessage(Receipt.PerformanceReceipt performanceReceipt) {
+    return "  %s: %s (%s seats)"
+        .formatted(
+            performanceReceipt.play(),
+            numberFormat.format(performanceReceipt.amount() / 100),
+            performanceReceipt.seats());
   }
 
   private Play retrievePlayBy(PlayId playId) {
     return this.playsIdToPlay.get(playId);
-  }
-
-  private record PerformancesOutput(String message, Integer playsAmount, Integer volumeCredits) {
-    public PerformancesOutput combine(PerformancesOutput performancesOutput) {
-      return new PerformancesOutput(
-          this.message + "\n" + performancesOutput.message,
-          this.playsAmount + performancesOutput.playsAmount,
-          this.volumeCredits + performancesOutput.volumeCredits);
-    }
   }
 }

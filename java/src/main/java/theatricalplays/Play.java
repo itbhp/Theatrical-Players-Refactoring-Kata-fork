@@ -7,7 +7,7 @@ public sealed interface Play permits Tragedy, Comedy, GenericPlay {
   int amountFor(Audience audience);
 
   default int volumeCreditsFor(Audience audience){
-      return Math.max(audience.soldTickets() - 30, 0);
+      return Math.max(audience.seats() - 30, 0);
   }
 
   static Play of(String name, String type) {
