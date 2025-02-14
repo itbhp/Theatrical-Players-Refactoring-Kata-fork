@@ -25,7 +25,7 @@ public class StatementPrinter {
                       var audience = new Audience(performance.audience());
                       var playAmount = play.amountFor(audience);
                       var volumeCredit = play.volumeCreditsFor(audience);
-                      return new Receipt.PerformanceReceipt(
+                      return new Receipt.Performance(
                           play.name(), performance.audience(), playAmount, volumeCredit);
                     })
                 .toList());
@@ -37,19 +37,19 @@ public class StatementPrinter {
     return "Statement for %s\n".formatted(customer)
         + "%s\n"
             .formatted(
-                receipt.performanceReceipts().stream()
+                receipt.performances().stream()
                     .map(this::performaceMessage)
                     .collect(Collectors.joining("\n")))
         + "Amount owed is %s\n".formatted(numberFormat.format(receipt.totalAmounts() / 100))
         + "You earned %s credits\n".formatted(receipt.totalCredits());
   }
 
-  private String performaceMessage(Receipt.PerformanceReceipt performanceReceipt) {
+  private String performaceMessage(Receipt.Performance performance) {
     return "  %s: %s (%s seats)"
         .formatted(
-            performanceReceipt.play(),
-            numberFormat.format(performanceReceipt.amount() / 100),
-            performanceReceipt.seats());
+            performance.play(),
+            numberFormat.format(performance.amount() / 100),
+            performance.seats());
   }
 
   private Play retrievePlayBy(PlayId playId) {
