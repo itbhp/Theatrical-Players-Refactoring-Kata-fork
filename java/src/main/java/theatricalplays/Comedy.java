@@ -13,7 +13,7 @@ public record Comedy(String name) implements Play {
 
   @Override
   public int volumeCreditsFor(Audience audience) {
-    var base = Math.max(audience.seats() - 30, 0);
+    var base = Play.super.volumeCreditsFor(audience);
     return base + Double.valueOf((double) audience.seats() / 5).intValue();
   }
 }
