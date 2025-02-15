@@ -26,7 +26,7 @@ public class StatementPrinter {
                       var playAmount = play.amountFor(audience);
                       var volumeCredit = play.volumeCreditsFor(audience);
                       return new Receipt.Performance(
-                          play.name(), performance.audience(), playAmount, volumeCredit);
+                          play.name(), audience.seats(), playAmount, volumeCredit);
                     })
                 .toList());
 
