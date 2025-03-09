@@ -7,12 +7,12 @@ public record Receipt(List<Performance> performances, int totalAmounts, int tota
   Receipt(List<Performance> performances) {
     this(
         performances,
-        sum(performances, Performance::amount),
-        sum(performances, Performance::volumeCredits));
+        sumFrom(performances, Performance::amount),
+        sumFrom(performances, Performance::volumeCredits));
   }
 
-  private static int sum(List<Performance> performances, ToIntFunction<Performance> amount) {
-    return performances.stream().mapToInt(amount).sum();
+  private static int sumFrom(List<Performance> performances, ToIntFunction<Performance> value) {
+    return performances.stream().mapToInt(value).sum();
   }
 
   public static Receipt of(List<Performance> performances) {

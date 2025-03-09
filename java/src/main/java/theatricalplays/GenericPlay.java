@@ -3,11 +3,11 @@ package theatricalplays;
 public record GenericPlay(String name, String type) implements Play {
   @Override
   public int amountFor(Audience audience) {
-    throw new Error("unknown type: ${play.type}");
+    throw new Error("unknown type: ${type}");
   }
 
   @Override
   public int volumeCreditsFor(Audience audience) {
-    throw new Error("unknown type: ${play.type}");
+    throw new Error("unknown type: ${type}");
   }
 }
